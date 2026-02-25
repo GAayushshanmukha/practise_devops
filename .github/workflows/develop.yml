@@ -1,9 +1,9 @@
-name: Build Java JAR
+name: Develop Branch Build
 
 on:
   push:
     branches:
-      - New1
+      - develop
 
 jobs:
   build:
@@ -20,9 +20,20 @@ jobs:
           distribution: 'temurin'
 
       - name: 3. Build the JAR using Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean package
 
-      - name: 4. Upload the JAR as artifact
+      - name: 4. Run Tests
+        run: mvn test
+
+      - name: 5. Run Snyk Security Scan
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: 6. Upload the JAR as artifact
         uses: actions/upload-artifact@v4
         with:
           name: my-app-jar

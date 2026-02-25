@@ -1,9 +1,9 @@
-name: Build Java JAR
+name: Feature Branch Build
 
 on:
   push:
     branches:
-      - New1
+      - feature/*
 
 jobs:
   build:
