@@ -1,0 +1,31 @@
+name: Build Java JAR
+
+on:
+  push:
+    branches:
+      - New1
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Download your code from GitHub
+        uses: actions/checkout@v4
+
+      - name: 2. Install Java 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: 3. Build the JAR using Maven
+        run: mvn clean package -DskipTests
+
+      - name: 4. Upload the JAR as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-jar
+          path: target/*.jar
